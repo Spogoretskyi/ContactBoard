@@ -10,9 +10,10 @@ class db
 
     public function __construct()
     {
-        $this->host = 'localhost';
-        $this->user = 'homestead';
-        $this->password = 'secret';
+        $this->host = '127.0.0.1';
+        $this->user = 'root';
+        $this->password = 'root';
+        $this->database_name = 'contactboard';
         $this->connect();
     }
 
@@ -25,6 +26,5 @@ class db
     {
         return mysqli_query($this->connection, $query);
     }
-
 
 }
