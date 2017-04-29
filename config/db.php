@@ -32,7 +32,7 @@ class db
 
         $result = array();
         $dbresult = mysqli_query($this->connection, $query);
-        while($row = $dbresult->fetch_row())
+        while($row = $dbresult->fetch_assoc())
         {
             $result[] = $row;
         }
@@ -45,6 +45,11 @@ class db
     public function query($query)
     {
         return mysqli_query($this->connection, $query);
+    }
+    public function insert($query)
+    {
+        $dbres = mysqli_query($this->connection, $query);
+        if (!$dbres) return mysqli_error($this->connection);
     }
 
 }
