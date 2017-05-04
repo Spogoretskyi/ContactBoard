@@ -2,54 +2,61 @@
 
 class db
 {
-    protected $host;
-    protected $user;
-    protected $password;
-    protected $connection;
-    protected $database_name;
-
-    public function __construct()
+    protected function connect()
     {
-        $this->host = '127.0.0.1';
-        $this->user = 'root';
-        $this->password = 'root';
-        $this->database_name = 'contactboard';
-        $this->connect();
+        $opt = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,];
+        $pdo = new PDO ('mysql:host=127.0.0.1;dbname=contactboard','root','root', $opt);
+        return $pdo;
     }
 
-    public function __destruct()
+    public function selectTop20()
     {
-        mysqli_close($this->connection);
-    }
-
-    public function connect()
-    {
-        $this->connection = new mysqli($this->host, $this->user, $this->password, $this->database_name);
-    }
-
-    public function select($query)
-    {
-
-        $result = array();
-        $dbresult = mysqli_query($this->connection, $query);
-        while($row = $dbresult->fetch_assoc())
-        {
-            $result[] = $row;
+        try {
+            $pdo = $this->connect();
+            $result = array();
+            $stmt = $pdo->query("SELECT * FROM comments ORDER BY username DESC LIMIT 20");
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $result[] = $row;
+            }
+            return $result;
         }
-
-        $dbresult->free();
-
-
-        return $result;
+        catch (PDOException $err){
+            var_dump($err);
+        }
     }
-    public function query($query)
+
+    public function count()
     {
-        return mysqli_query($this->connection, $query);
-    }
-    public function insert($query)
-    {
-        $dbres = mysqli_query($this->connection, $query);
-        if (!$dbres) return mysqli_error($this->connection);
+        try {
+            $pdo = $this->connect();
+            $stmt = $pdo->prepare("SELECT text FROM comments");
+            $stmt->execute();
+            $rows = $stmt->rowCount();
+            return $rows;
+        }
+        catch (PDOException $err) {
+            var_dump($err);
+        }
     }
 
+    public function insert($values)
+    {
+        try{
+        $pdo = $this->connect();
+        if (isset($values[0]) && isset ($values[1])) {
+            $sql = "INSERT INTO comments (username, text)
+                        VALUES (?,?)" ;
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(array(
+                $values[0],
+                $values[1]));
+        }
+    }
+    catch (PDOException $err){
+            var_dump($err);
+    }
+        echo "<div style=\"font:bold 18px Arial; color:greenyellow; text-align:center;\">Ваш комментарий добавлен.</div>";
+    }
 }

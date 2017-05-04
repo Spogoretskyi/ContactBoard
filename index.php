@@ -1,33 +1,31 @@
 <?php
-include('AddComment.php');
 
 require_once './bootstrap.php';
 $db = new db;
-echo '<pre>';
-$result = $db->select('select * from comments');
+$result = $db->selectTop20();
+$username = $_POST["username"];
+$text = $_POST["text"];
+$submit = $_POST['submit'];
 
-if ($_POST) {
-    $username = $_POST["username"];
-    $text = $_POST["text"];
-    $res = $db->insert("INSERT INTO comments (username,text) VALUES ('$username','$text')");
+include("header.php");
 
-    echo $res;
+switch($_GET['page']) {
+    case 'home':
+        include('ToScreen.php');
+        break;
+    case 'addcomment':
+        include("AddComment.php");
+
+        if (isset($submit))
+        {
+            if(empty($username) || empty($text))
+                echo "<div style=\"font:bold 18px Arial; color:red; text-align:center;\">Заполните пустое поле.</div>";
+            else
+             $res = $db->insert(array($username, $text));
+        }
+        break;
+    default:
+        include('ToScreen.php');
 }
 
-?>
-
-    <table border="1">
-        <th>User Name</th>
-        <th>Text</th>
-        <?php foreach ($result as $r) { ?>
-            <tr>
-                <td> <?php echo $r['username'] ?></td>
-                <td> <?php echo $r['text'] ?> </td>
-            </tr>
-        <?php } ?>
-    </table>
-
-<?php
-
-echo '</pre>';
 ?>
