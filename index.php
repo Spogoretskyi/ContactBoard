@@ -2,7 +2,7 @@
 
 require_once './bootstrap.php';
 $db = new db;
-$result = $db->selectTop20();
+$result = $db->selectTop(15, 'ASC');
 $username = $_POST["username"];
 $text = $_POST["text"];
 $submit = $_POST['submit'];

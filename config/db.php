@@ -11,19 +11,25 @@ class db
         return $pdo;
     }
 
-    public function selectTop20()
+    public function selectTop($top, $sort)
     {
         try {
             $pdo = $this->connect();
             $result = array();
-            $stmt = $pdo->query("SELECT * FROM comments ORDER BY username DESC LIMIT 20");
+            if($sort === 'DESC')
+                $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY username DESC LIMIT :top");
+            else
+                $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY username ASC LIMIT :top");
+            $stmt->bindValue(':top', $top, PDO::PARAM_INT);
+            $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $result[] = $row;
             }
             return $result;
         }
         catch (PDOException $err){
-            var_dump($err);
+            echo "Data select error".$err->getMessage();
+            exit;
         }
     }
 
@@ -37,7 +43,8 @@ class db
             return $rows;
         }
         catch (PDOException $err) {
-            var_dump($err);
+            echo "Data count error".$err->getMessage();
+            exit;
         }
     }
 
@@ -55,7 +62,8 @@ class db
         }
     }
     catch (PDOException $err){
-            var_dump($err);
+            echo "Data insert error".$err->getMessage();
+            exit;
     }
         echo "<div style=\"font:bold 18px Arial; color:greenyellow; text-align:center;\">Ваш комментарий добавлен.</div>";
     }
