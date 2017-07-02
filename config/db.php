@@ -1,14 +1,13 @@
 <?php
 
 require_once 'MyException.php';
-include 'C:\OpenServer\domains\ContactBoard\settings.php';
+include (dirname(dirname(__FILE__)).'\settings.php');
 
 class db
 {
     protected function connect()
     {
-        $set = new Settings();
-        $settings = $set->settings();
+        $settings = Settings::getSettings();
         $opt = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,];
@@ -77,7 +76,7 @@ class db
             $qs = str_repeat("?,",count($fields)-1);
             $sql = "INSERT INTO $table ($list) VALUES ({$qs}?)";
             $stmt = $pdo->prepare($sql);
-            if(!$stmt->execute())
+            if(!$stmt->execute($values))
                 throw new MyException();
             return $stmt ->execute($values);
     }
