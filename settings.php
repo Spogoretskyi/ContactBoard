@@ -2,7 +2,7 @@
 
 class Settings
 {
-    public function settings()
+    public static function getSettings()
     {
         $settings = array(
             'host' => '127.0.0.1',
