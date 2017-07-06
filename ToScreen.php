@@ -2,7 +2,7 @@
 <?php require_once "header.php" ?>
 <div class="jumbotron">
     <br>
-    <p class="text-center">Blog, total posts <?php echo $post = $db->count() ?></p>
+    <p class="text-center">Blog, total posts <?php echo $post = $db->count($tableName) ?></p>
     <div class="row">
         <div class="col-md-6 vcenter">
 <div class="table table-condensed">

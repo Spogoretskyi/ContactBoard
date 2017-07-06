@@ -1,13 +1,26 @@
 <?php
 
+require_once 'MyException.php';
+include (dirname(dirname(__FILE__)).'\settings.php');
+
 class db
 {
     protected function connect()
     {
+        $settings = Settings::getSettings();
         $opt = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,];
-        $pdo = new PDO ('mysql:host=127.0.0.1;dbname=contactboard','root','root', $opt);
+        $pdo = new PDO (sprintf(
+            'mysql:host=%s;dbname=%s;port=%s;charset=%s',
+            $settings['host'],
+            $settings['name'],
+            $settings['port'],
+            $settings['charset']
+            ),
+            $settings['username'],
+            $settings['password'], $opt
+            );
         return $pdo;
     }
 
@@ -21,48 +34,54 @@ class db
             else
                 $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY username ASC LIMIT :top");
             $stmt->bindValue(':top', $top, PDO::PARAM_INT);
+            if(!$stmt->execute())
+                throw new MyException();
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $result[] = $row;
             }
             return $result;
         }
-        catch (PDOException $err){
-            echo "Data select error".$err->getMessage();
+        catch (MyException $err){
+            echo "Error: ".$err->getError();
             exit;
         }
     }
 
-    public function count()
+    public function count($tableName)
     {
         try {
             $pdo = $this->connect();
-            $stmt = $pdo->prepare("SELECT text FROM comments");
+            $stmt = $pdo->prepare("SELECT count(*) FROM $tableName");
+            if(!$stmt->execute())
+                throw new MyException();
             $stmt->execute();
-            $rows = $stmt->rowCount();
-            return $rows;
+            $count = $stmt->fetch(PDO::FETCH_NUM);
+
+            return reset($count);
         }
-        catch (PDOException $err) {
-            echo "Data count error".$err->getMessage();
+        catch (MyException $err){
+            echo "Error: ".$err->getError();
             exit;
         }
     }
 
-    public function insert($values)
+    public function insert($table, $array)
     {
         try{
-        $pdo = $this->connect();
-        if (isset($values[0]) && isset ($values[1])) {
-            $sql = "INSERT INTO comments (username, text)
-                        VALUES (?,?)" ;
+            $pdo = $this->connect();
+            $fields = array_keys($array);
+            $values = array_values($array);
+            $list = implode(',', $fields);
+            $qs = str_repeat("?,",count($fields)-1);
+            $sql = "INSERT INTO $table ($list) VALUES ({$qs}?)";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array(
-                $values[0],
-                $values[1]));
-        }
+            if(!$stmt->execute($values))
+                throw new MyException();
+            return $stmt ->execute($values);
     }
-    catch (PDOException $err){
-            echo "Data insert error".$err->getMessage();
+        catch (MyException $err){
+            echo "Error: ".$err->getError();
             exit;
     }
         echo "<div style=\"font:bold 18px Arial; color:greenyellow; text-align:center;\">Ваш комментарий добавлен.</div>";
