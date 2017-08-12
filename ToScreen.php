@@ -11,7 +11,8 @@
         <thead>
         <th style="padding: 40px; vertical-align: center;">#</th>
         <th style="padding: 40px; vertical-align: center;">User</th>
-        <th style="padding: 40px; vertical-align: center;">Text</th>
+        <th style="padding: 40px; word-break: break-all; width="100" vertical-align: center;">Text</th>
+        <th style="padding: 40px; vertical-align: center;">Date</th>
         <th></th>
         </tr>
         </thead>
@@ -20,7 +21,8 @@
         <tr>
             <td style="padding: 40px; vertical-align: center;" width="50" align="left"> <?php  echo $i + 1; ?></td>
             <td style="padding: 40px; vertical-align: center;" width="150" align="left"> <?php echo $r['username'] ?></td>
-            <td style="padding: 40px" width="600" align="left"> <?php echo $r['text'] ?> </td>
+            <td style="padding: 40px" width="100" align="left"> <?php echo $r['text'] ?> </td>
+            <td style="padding: 40px" width="50" align="left"> <?php echo $r['Add_date'] ?> </td>
         </tr>
     <?php } ?>
         </div>

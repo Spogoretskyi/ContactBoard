@@ -3,11 +3,12 @@
 require_once './bootstrap.php';
 $tableName = 'comments';
 $db = new db;
-$result = $db->selectTop(15, 'ASC');
+$result = $db->selectTop(15, 'DATE');
 $username = $_POST["username"];
 $text = $_POST["text"];
 $submit = $_POST['submit'];
-$insertData = array ('username'=>$username, "text"=>$text);
+$date = date('F j, Y, g:i a');
+$insertData = array ('username'=>$username, "text"=>$text, "Add_date"=>$date);
 
 include("header.php");
 
@@ -17,13 +18,12 @@ switch($_GET['page']) {
         break;
     case 'addcomment':
         include("AddComment.php");
-
         if (isset($submit))
         {
             if(empty($username) || empty($text))
                 echo "<div style=\"font:bold 18px Arial; color:red; text-align:center;\">Заполните пустое поле.</div>";
             else
-             $res = $db->insert($tableName, $insertData);
+                $res = $db->insert($tableName, $insertData);
         }
         break;
     default:
