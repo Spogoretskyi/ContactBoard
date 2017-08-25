@@ -1,7 +1,7 @@
 <?php
 
 require_once 'MyException.php';
-include (dirname(dirname(__FILE__)).'\settings.php');
+include (dirname(dirname(__FILE__)).'/settings.php');
 
 class db
 {
