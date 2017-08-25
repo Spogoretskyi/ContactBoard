@@ -22,7 +22,8 @@ $faker = \Faker\Factory::create();
                         <tr>
                             <td style="padding: 40px; vertical-align: center;" align="left"> <?php echo $i + 1; ?></td>
                             <td style="padding: 40px; vertical-align: center;"
-                                align="left"><img src="<?php echo $faker->imageUrl(100, 100, 'cats') ?>" alt=""> <br><?php echo $r['username'] ?></td>
+                                align="left"><img src="<?php echo $faker->imageUrl(100, 100, 'people') ?>" alt="">
+                                <br><?php echo $r['username'] ?></td>
                             <td style="padding: 40px" align="left"> <?php echo $r['text'] ?> </td>
                             <td style="padding: 40px" align="left"> <?php echo $r['Add_date'] ?> </td>
                         </tr>
