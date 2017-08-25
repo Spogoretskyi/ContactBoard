@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require_once './bootstrap.php';
 $tableName = 'comments';
@@ -14,7 +17,9 @@ if ($_POST) {
 }
 
 include("header.php");
-if (!isset($_GET['page'])) $_GET['page'] = 'home';
+if (!isset($_GET['page'])) {
+    $_GET['page'] = 'home';
+}
 switch ($_GET['page']) {
     case 'home':
         include('ToScreen.php');

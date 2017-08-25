@@ -21,9 +21,12 @@ $faker = \Faker\Factory::create();
                     <?php foreach ($result as $i => $r) { ?>
                         <tr>
                             <td style="padding: 40px; vertical-align: center;" align="left"> <?php echo $i + 1; ?></td>
-                            <td style="padding: 40px; vertical-align: center;"
-                                align="left"><img src="<?php echo $faker->imageUrl(100, 100, 'people') ?>" alt="">
-                                <br><?php echo $r['username'] ?></td>
+                            <td style="padding: 40px;"
+                                align="left"><img class="img-circle" style="vertical-align:middle"
+                                                  src="<?php echo $faker->imageUrl(50, 50, 'people') ?>" alt="">
+                                &nbsp;&nbsp;&nbsp;
+                                <span>    <?php echo $r['username'] ?></span>
+                            </td>
                             <td style="padding: 40px" align="left"> <?php echo $r['text'] ?> </td>
                             <td style="padding: 40px" align="left"> <?php echo $r['Add_date'] ?> </td>
                         </tr>
