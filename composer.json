@@ -1,6 +1,7 @@
 {
   "name": "namewithin/contact-board",
   "require": {
-    "kzykhys/Text": "^1.0"
+    "kzykhys/Text": "^1.0",
+    "robmorgan/phinx": "^0.8.1"
   }
 }
