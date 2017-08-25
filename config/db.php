@@ -31,6 +31,10 @@ class db
             $result = array();
             if($sort === 'DESC')
                 $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY username DESC LIMIT :top");
+            elseif ($sort === 'SYMBOLS') // сортировка по кол-ву символов
+                $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY CHAR_LENGTH(text) DESC LIMIT :top");
+            elseif ($sort === 'DATE') // сортировка по дате
+                $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY Add_date DESC LIMIT :top");
             else
                 $stmt = $pdo->prepare("SELECT * FROM comments ORDER BY username ASC LIMIT :top");
             $stmt->bindValue(':top', $top, PDO::PARAM_INT);
@@ -76,11 +80,10 @@ class db
             $qs = str_repeat("?,",count($fields)-1);
             $sql = "INSERT INTO $table ($list) VALUES ({$qs}?)";
             $stmt = $pdo->prepare($sql);
-            if(!$stmt->execute($values))
-                throw new MyException();
-            return $stmt ->execute($values);
+            return $stmt->execute($values);
     }
-        catch (MyException $err){
+        catch (MyException $err)
+        {
             echo "Error: ".$err->getError();
             exit;
     }
