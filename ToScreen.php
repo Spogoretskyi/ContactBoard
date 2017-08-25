@@ -28,7 +28,7 @@ $faker = \Faker\Factory::create();
                                 <span>    <?php echo $r['username'] ?></span>
                             </td>
                             <td style="padding: 40px" align="left"> <?php echo $r['text'] ?> </td>
-                            <td style="padding: 40px" align="left"> <?php echo $r['Add_date'] ?> </td>
+                            <td style="padding: 40px" align="left"> <?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $r['Add_date'])->diffForHumans() ?> </td>
                         </tr>
                     <?php } ?>
             </div>

@@ -11,9 +11,8 @@ if ($_POST) {
     $username = $_POST["username"];
     $text = $_POST["text"];
     $submit = $_POST['submit'];
-    $date = date('F j, Y, g:i a');
+    $date = \Carbon\Carbon::now();
     $insertData = ['username' => $username, "text" => $text, "Add_date" => $date];
-
 }
 
 include("header.php");
@@ -25,18 +24,22 @@ switch ($_GET['page']) {
         include('ToScreen.php');
         break;
     case 'addcomment':
-        include("AddComment.php");
         if (isset($submit)) {
             if (empty($username) || empty($text)) {
                 echo "<div style=\"font:bold 18px Arial; color:red; text-align:center;\">Заполните пустое поле.</div>";
             } else {
                 $res = $db->insert($tableName, $insertData);
             }
+            $result = $db->selectTop(15, 'DATE');
+            include('ToScreen.php');
+            exit();
         }
+        include("AddComment.php");
         break;
     default:
         include('ToScreen.php');
 
 
 }
+
 ?>

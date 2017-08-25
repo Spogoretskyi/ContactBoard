@@ -12,7 +12,7 @@ class CommandSeeder extends AbstractSeed
         for ($i = 0; $i < 500; $i++) {
             $comment['username'] = $faker->name('female');
             $comment['text'] = $faker->sentences(rand(1, 3), true);
-            $comment['Add_date'] = $faker->dateTime()->format('Y-m-d H:i:s');
+            $comment['Add_date'] = $faker->dateTimeThisMonth()->format('Y-m-d H:i:s');
             $data[] = $comment;
         }
         $this->table('comments')->insert($data)->save();
